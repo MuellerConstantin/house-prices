@@ -1,0 +1,4 @@
+[core]
+    remote = storagebox
+['remote "storagebox"']
+    url = ssh://u327714.your-storagebox.de/house-prices
