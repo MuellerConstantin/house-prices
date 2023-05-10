@@ -1,4 +1,5 @@
 jupyter
+nbstripout
 ipython
 pylint
 dvc

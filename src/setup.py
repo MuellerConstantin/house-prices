@@ -1,3 +1,7 @@
+"""
+Setup file for the project source code package.
+"""
+
 from setuptools import setup, find_packages
 
 setup(
