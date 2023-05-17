@@ -1,0 +1,7 @@
+stages:
+  preprocess:
+    cmd: preprocess -v -i data/raw/train.csv -o data/processed/data.csv
+    deps:
+    - data/raw/train.csv
+    outs:
+    - data/processed/data.csv

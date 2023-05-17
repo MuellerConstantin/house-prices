@@ -1,0 +1,12 @@
+schema: '2.0'
+stages:
+  preprocess:
+    cmd: preprocess -v -i data/raw/train.csv -o data/processed/data.csv
+    deps:
+    - path: data/raw/train.csv
+      md5: 80ccab65fb115cbad143dbbd2bcd5577
+      size: 460676
+    outs:
+    - path: data/processed/data.csv
+      md5: 876a2fc347a41d01c7dbf64aadef2c9e
+      size: 490648
