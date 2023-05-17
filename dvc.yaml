@@ -21,3 +21,9 @@ stages:
     outs:
     - data/modelling/train.csv
     - data/modelling/validation.csv
+  train_lm:
+    cmd: train_lm -v -i data/modelling/train.csv -o models/lm.joblib
+    deps:
+    - data/modelling/train.csv
+    outs:
+    - models/lm.joblib

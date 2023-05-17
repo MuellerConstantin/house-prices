@@ -47,3 +47,13 @@ stages:
     - path: data/modelling/validation.csv
       md5: 41742cda160fe06a864ee5fbf81efb13
       size: 92636
+  train_lm:
+    cmd: train_lm -v -i data/modelling/train.csv -o models/lm.joblib
+    deps:
+    - path: data/modelling/train.csv
+      md5: f6e0365dd2aa00cec50be6b636a6cb9b
+      size: 369183
+    outs:
+    - path: models/lm.joblib
+      md5: fad474c270630d75b0c674242a59166d
+      size: 25045
