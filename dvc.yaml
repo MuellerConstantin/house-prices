@@ -1,7 +1,20 @@
 stages:
-  preprocess:
-    cmd: preprocess -v -i data/raw/train.csv -o data/processed/data.csv
+  preprocess_train:
+    cmd: preprocess -v -i data/raw/train.csv -o data/processed/train.csv
     deps:
     - data/raw/train.csv
     outs:
-    - data/processed/data.csv
+    - data/processed/train.csv
+  preprocess_test:
+    cmd: preprocess -v -i data/raw/test.csv -o data/processed/test.csv
+    deps:
+    - data/raw/test.csv
+    outs:
+    - data/processed/test.csv
+  split:
+    cmd: split -v -i data/processed/train.csv -t data/modelling/train.csv -e data/modelling/validation.csv
+    deps:
+    - data/processed/train.csv
+    outs:
+    - data/modelling/train.csv
+    - data/modelling/validation.csv

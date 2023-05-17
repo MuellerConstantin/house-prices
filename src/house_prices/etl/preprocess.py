@@ -104,12 +104,12 @@ def main():
     global vprint
     vprint = print
 
-  vprint(f"Loading data from ({args.input}) ...")
+  vprint(f"Loading data from '{args.input}' ...")
 
   df = pd.read_csv(args.input)
   df = preprocess(df)
 
-  vprint(f"Saving data to ({args.output}) ...")
+  vprint(f"Saving data to '{args.output}' ...")
 
   df.to_csv(args.output, index=False)
 

@@ -11,11 +11,13 @@ setup(
     install_requires=[
         "numpy",
         "pandas",
-        "tqdm"
+        "tqdm",
+        "scikit-learn",
     ],
     entry_points={
         "console_scripts": [
             "preprocess=house_prices.etl.preprocess:main",
+            "split=house_prices.etl.split:main",
         ]
     }
 )
