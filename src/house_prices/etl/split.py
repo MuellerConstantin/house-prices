@@ -4,6 +4,7 @@ Module for splitting the data into train and test/validation sets.
 
 import argparse
 import pandas as pd
+import dvc.api
 from sklearn.model_selection import train_test_split
 
 # pylint: disable=unnecessary-lambda-assignment
@@ -32,7 +33,8 @@ def main():
   vprint(f"Loading data from '{args.input}' ...")
 
   df = pd.read_csv(args.input)
-  train_df, test_df = train_test_split(df, test_size=0.2, random_state=42)
+  params = dvc.api.params_show()
+  train_df, test_df = train_test_split(df, test_size=params["split"]["test_size"], random_state=params["split"]["seed"])
 
   vprint(f"Saving data to '{args.train}' and '{args.test}' ...")
 

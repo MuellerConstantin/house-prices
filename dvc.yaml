@@ -13,6 +13,9 @@ stages:
     - data/processed/test.csv
   split:
     cmd: split -v -i data/processed/train.csv -t data/modelling/train.csv -e data/modelling/validation.csv
+    params:
+    - split.seed
+    - split.test_size
     deps:
     - data/processed/train.csv
     outs:

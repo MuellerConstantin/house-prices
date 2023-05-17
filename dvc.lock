@@ -36,6 +36,10 @@ stages:
     - path: data/processed/train.csv
       md5: 876a2fc347a41d01c7dbf64aadef2c9e
       size: 490648
+    params:
+      params.yaml:
+        split.seed: 42
+        split.test_size: 0.2
     outs:
     - path: data/modelling/train.csv
       md5: f6e0365dd2aa00cec50be6b636a6cb9b
