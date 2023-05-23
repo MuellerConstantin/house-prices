@@ -18,8 +18,8 @@ stages:
       size: 451405
     outs:
     - path: data/processed/test.csv
-      md5: 23ccc4be172fcdb294d529e762093e97
-      size: 498500
+      md5: 79ed1c2c423b4ee3e983c1b328e5a03d
+      size: 519534
   preprocess_train:
     cmd: preprocess -v -i data/raw/train.csv -o data/processed/train.csv
     deps:
@@ -28,42 +28,42 @@ stages:
       size: 460676
     outs:
     - path: data/processed/train.csv
-      md5: 876a2fc347a41d01c7dbf64aadef2c9e
-      size: 490648
+      md5: 2a9fa0139a9781008a7b75c4a938e768
+      size: 511813
   split:
     cmd: split -v -i data/processed/train.csv -t data/modelling/train.csv -e data/modelling/validation.csv
     deps:
     - path: data/processed/train.csv
-      md5: 876a2fc347a41d01c7dbf64aadef2c9e
-      size: 490648
+      md5: 2a9fa0139a9781008a7b75c4a938e768
+      size: 511813
     params:
       params.yaml:
         split.seed: 42
         split.test_size: 0.2
     outs:
     - path: data/modelling/train.csv
-      md5: f6e0365dd2aa00cec50be6b636a6cb9b
-      size: 369183
+      md5: 55f6497ed59d97fa3a699a998c298e5e
+      size: 386024
     - path: data/modelling/validation.csv
-      md5: 41742cda160fe06a864ee5fbf81efb13
-      size: 92636
+      md5: 32cf800001a0a4b876017692a3d0aaa4
+      size: 96960
   train_lm:
     cmd: train_lm -v -i data/modelling/train.csv -o models/lm.joblib
     deps:
     - path: data/modelling/train.csv
-      md5: f6e0365dd2aa00cec50be6b636a6cb9b
-      size: 369183
+      md5: 55f6497ed59d97fa3a699a998c298e5e
+      size: 386024
     outs:
     - path: models/lm.joblib
-      md5: fad474c270630d75b0c674242a59166d
-      size: 25045
+      md5: 6afe8bcfef84b6548255612e1cb8f970
+      size: 25917
   train_lm_ridge:
     cmd: train_lm_ridge -v -i data/modelling/train.csv -o models/lm_ridge.joblib
     deps:
     - path: data/modelling/train.csv
-      md5: f6e0365dd2aa00cec50be6b636a6cb9b
-      size: 369183
+      md5: 55f6497ed59d97fa3a699a998c298e5e
+      size: 386024
     outs:
     - path: models/lm_ridge.joblib
-      md5: 27049de6f73d536e032ddc772471b9c1
-      size: 30615
+      md5: 4bc90324a8696a391d99ab28e0de8c82
+      size: 31495

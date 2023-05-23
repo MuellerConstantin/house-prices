@@ -37,6 +37,30 @@ def preprocess(df: pd.DataFrame):
 
   df["MasVnrType"] = df["MasVnrType"].fillna("None")
 
+  df["OverallCond"] = df["OverallCond"].replace({
+    10: "Very Excellent",
+    9: "Excellent",
+    8: "Very Good",
+    7: "Good",
+    6: "Above Average",
+    5: "Average",
+    4: "Below Average",
+    3: "Fair",
+    2: "Poor",
+    1: "Very Poor"})
+
+  df["OverallQual"] = df["OverallQual"].replace({
+      10: "Very Excellent",
+      9: "Excellent",
+      8: "Very Good",
+      7: "Good",
+      6: "Above Average",
+      5: "Average",
+      4: "Below Average",
+      3: "Fair",
+      2: "Poor",
+      1: "Very Poor"})
+
   # Lot properties transformations
 
   df["LotFrontage"] = df["LotFrontage"].fillna(0)
