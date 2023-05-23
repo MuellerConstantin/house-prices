@@ -27,3 +27,9 @@ stages:
     - data/modelling/train.csv
     outs:
     - models/lm.joblib
+  train_lm_ridge:
+    cmd: train_lm_ridge -v -i data/modelling/train.csv -o models/lm_ridge.joblib
+    deps:
+    - data/modelling/train.csv
+    outs:
+    - models/lm_ridge.joblib

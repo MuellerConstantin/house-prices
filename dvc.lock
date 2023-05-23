@@ -57,3 +57,13 @@ stages:
     - path: models/lm.joblib
       md5: fad474c270630d75b0c674242a59166d
       size: 25045
+  train_lm_ridge:
+    cmd: train_lm_ridge -v -i data/modelling/train.csv -o models/lm_ridge.joblib
+    deps:
+    - path: data/modelling/train.csv
+      md5: f6e0365dd2aa00cec50be6b636a6cb9b
+      size: 369183
+    outs:
+    - path: models/lm_ridge.joblib
+      md5: 27049de6f73d536e032ddc772471b9c1
+      size: 30615

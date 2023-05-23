@@ -19,6 +19,7 @@ setup(
       "preprocess=house_prices.etl.preprocess:main",
       "split=house_prices.etl.split:main",
       "train_lm=house_prices.modelling.train_lm:main",
+      "train_lm_ridge=house_prices.modelling.train_lm_ridge:main",
     ]
   }
 )

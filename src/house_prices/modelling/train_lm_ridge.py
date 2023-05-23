@@ -1,12 +1,13 @@
 """
-Module for training a linear regression model.
+Module for training a linear regression model with ridge regularization.
 """
 
 import argparse
 import pandas as pd
 import joblib
 from sklearn.pipeline import Pipeline
-from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import Ridge
+from sklearn.model_selection import RandomizedSearchCV
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from sklearn.compose import make_column_transformer, make_column_selector
@@ -16,7 +17,7 @@ vprint = lambda *a, **k: None
 
 def build_model():
   """
-  Builds a linear regression model.
+  Builds a linear regression model with ridge regularization.
   """
 
   vprint("Building model ...")
@@ -38,28 +39,37 @@ def build_model():
 
   model = Pipeline([
     ("transformer", transformer),
-    ("regressor", LinearRegression()),
+    ("regressor", Ridge()),
   ])
 
   return model
 
-def train_model(x: pd.DataFrame, y: pd.Series):
+def train_model(x: pd.DataFrame,
+                y: pd.Series,
+                param_distributions,
+                n_iter=10,
+                n_folds=10,
+                n_jobs=None,
+                verbose=0,
+                random_state=42):
   """
-  Trains a linear regression model.
+  Trains a linear regression model with ridge regularization.
   """
 
   model = build_model()
+  cv = RandomizedSearchCV(model, param_distributions, n_iter=n_iter, cv=n_folds,
+                          n_jobs=n_jobs, verbose=verbose, random_state=random_state)
 
   vprint("Training model ...")
 
-  model.fit(x, y)
+  cv.fit(x, y)
 
-  return model
+  return cv
 
 def main():
-  parser = argparse.ArgumentParser(prog="train_lm.py",
+  parser = argparse.ArgumentParser(prog="train_lm_ridge.py",
                                    formatter_class=argparse.RawTextHelpFormatter,
-                                   description="Trains a linear regression model.")
+                                   description="Trains a linear ridge regression model.")
 
   parser.add_argument("-v", "--verbose", action="store_true",
                       help="Print out verbose messages.")
@@ -77,7 +87,13 @@ def main():
   vprint(f"Loading data from '{args.input}' ...")
 
   df = pd.read_csv(args.input)
-  model = train_model(df.drop("SalePrice", axis=1), df["SalePrice"])
+
+  hyperparameters = {
+    "regressor__alpha": [0.00025, 0.0005, 0.001, 0.0025, 0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1, 2.5, 5, 10],
+  }
+
+  model = train_model(df.drop("SalePrice", axis=1), df["SalePrice"], hyperparameters,
+                      verbose=5 if args.verbose else 0)
 
   vprint(f"Saving model to '{args.output}' ...")
 

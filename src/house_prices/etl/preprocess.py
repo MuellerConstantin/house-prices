@@ -15,7 +15,7 @@ def preprocess(df: pd.DataFrame):
 
   vprint("Preprocessing data ...")
 
-  # Building properties
+  # Building properties transformations
 
   df["MSSubClass"] = df["MSSubClass"].replace({
     20: "1S1946-NEW", # 1-STORY 1946 & NEWER ALL STYLES
@@ -37,17 +37,17 @@ def preprocess(df: pd.DataFrame):
 
   df["MasVnrType"] = df["MasVnrType"].fillna("None")
 
-  # Lot properties
+  # Lot properties transformations
 
   df["LotFrontage"] = df["LotFrontage"].fillna(0)
 
-  # Utility properties
+  # Utility properties transformations
 
   df["Alley"] = df["Alley"].fillna("None")
 
-  # Neighborhood properties
+  # Neighborhood properties transformations
 
-  # Garage properties
+  # Garage properties transformations
 
   df.loc[df["GarageQual"].isna(), "GarageFinish"] = "None"
   df.loc[df["GarageQual"].isna(), "GarageType"] = "None"
@@ -57,9 +57,9 @@ def preprocess(df: pd.DataFrame):
   df.loc[df["GarageQual"].isna(), "GarageYrBlt"] = 0
   df["GarageQual"] = df["GarageQual"].fillna("None")
 
-  # Supplies properties
+  # Supplies properties transformations
 
-  # Basement properties
+  # Basement properties transformations
 
   df.loc[df["BsmtQual"].isna(), "BsmtCond"] = "None"
   df.loc[df["BsmtQual"].isna(), "BsmtExposure"] = "None"
@@ -73,14 +73,16 @@ def preprocess(df: pd.DataFrame):
   df.loc[df["BsmtQual"].isna(), "BsmtHalfBath"] = 0
   df["BsmtQual"] = df["BsmtQual"].fillna("None")
 
-  # Outdoor area properties
+  # Outdoor area properties transformations
 
   df["FireplaceQu"] = df["FireplaceQu"].fillna("None")
   df["PoolQC"] = df["PoolQC"].fillna("None")
   df["Fence"] = df["Fence"].fillna("None")
-  df["MiscFeature"].fillna("None", inplace=True)
+  df["MiscFeature"] = df["MiscFeature"].fillna("None")
 
-  # Kitchen properties
+  # Kitchen properties transformations
+
+  # General clean up transformations
 
   df = df.dropna()
 
