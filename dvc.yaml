@@ -28,6 +28,7 @@ stages:
     cmd: train_lm -v -i data/modelling/train.csv -o models/lm.joblib
     deps:
     - src/house_prices/modelling/train_lm.py
+    - src/house_prices/modelling/feature_selection.py
     - data/modelling/train.csv
     outs:
     - models/lm.joblib
@@ -35,6 +36,7 @@ stages:
     cmd: train_lm_ridge -v -i data/modelling/train.csv -o models/lm_ridge.joblib
     deps:
     - src/house_prices/modelling/train_lm_ridge.py
+    - src/house_prices/modelling/feature_selection.py
     - data/modelling/train.csv
     outs:
     - models/lm_ridge.joblib

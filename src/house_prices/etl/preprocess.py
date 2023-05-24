@@ -35,31 +35,31 @@ def preprocess(df: pd.DataFrame):
     180: "PUD-ALL", # PUD - MULTILEVEL - INCL SPLIT LEV/FOYER
     190: "2FAM-ALL"}) # 2 FAMILY CONVERSION - ALL STYLES AND AGES
 
-  df["MasVnrType"] = df["MasVnrType"].fillna("None")
+  df["MasVnrType"] = df["MasVnrType"].fillna("NA")
 
   df["OverallCond"] = df["OverallCond"].replace({
-    10: "Very Excellent",
-    9: "Excellent",
-    8: "Very Good",
-    7: "Good",
-    6: "Above Average",
-    5: "Average",
-    4: "Below Average",
-    3: "Fair",
-    2: "Poor",
-    1: "Very Poor"})
+    10: "VEx",
+    9: "Ex",
+    8: "VGd",
+    7: "Gd",
+    6: "AAvg",
+    5: "Avg",
+    4: "BAvg",
+    3: "Fa",
+    2: "Po",
+    1: "VPo"})
 
   df["OverallQual"] = df["OverallQual"].replace({
-      10: "Very Excellent",
-      9: "Excellent",
-      8: "Very Good",
-      7: "Good",
-      6: "Above Average",
-      5: "Average",
-      4: "Below Average",
-      3: "Fair",
-      2: "Poor",
-      1: "Very Poor"})
+    10: "VEx",
+    9: "Ex",
+    8: "VGd",
+    7: "Gd",
+    6: "AAvg",
+    5: "Avg",
+    4: "BAvg",
+    3: "Fa",
+    2: "Po",
+    1: "VPo"})
 
   # Lot properties transformations
 
@@ -67,15 +67,15 @@ def preprocess(df: pd.DataFrame):
 
   # Utility properties transformations
 
-  df["Alley"] = df["Alley"].fillna("None")
+  df["Alley"] = df["Alley"].fillna("NA")
 
   # Neighborhood properties transformations
 
   # Garage properties transformations
 
-  df.loc[df["GarageQual"].isna(), "GarageFinish"] = "None"
-  df.loc[df["GarageQual"].isna(), "GarageType"] = "None"
-  df.loc[df["GarageQual"].isna(), "GarageCond"] = "None"
+  df.loc[df["GarageQual"].isna(), "GarageFinish"] = "NA"
+  df.loc[df["GarageQual"].isna(), "GarageType"] = "NA"
+  df.loc[df["GarageQual"].isna(), "GarageCond"] = "NA"
   df.loc[df["GarageQual"].isna(), "GarageArea"] = 0
   df.loc[df["GarageQual"].isna(), "GarageCars"] = 0
   df.loc[df["GarageQual"].isna(), "GarageYrBlt"] = 0
@@ -85,30 +85,31 @@ def preprocess(df: pd.DataFrame):
 
   # Basement properties transformations
 
-  df.loc[df["BsmtQual"].isna(), "BsmtCond"] = "None"
-  df.loc[df["BsmtQual"].isna(), "BsmtExposure"] = "None"
-  df.loc[df["BsmtQual"].isna(), "BsmtFinType1"] = "None"
-  df.loc[df["BsmtQual"].isna(), "BsmtFinType2"] = "None"
+  df.loc[df["BsmtQual"].isna(), "BsmtCond"] = "NA"
+  df.loc[df["BsmtQual"].isna(), "BsmtExposure"] = "NA"
+  df.loc[df["BsmtQual"].isna(), "BsmtFinType1"] = "NA"
+  df.loc[df["BsmtQual"].isna(), "BsmtFinType2"] = "NA"
   df.loc[df["BsmtQual"].isna(), "BsmtFinSF1"] = 0
   df.loc[df["BsmtQual"].isna(), "BsmtFinSF2"] = 0
   df.loc[df["BsmtQual"].isna(), "BsmtUnfSF"] = 0
   df.loc[df["BsmtQual"].isna(), "TotalBsmtSF"] = 0
   df.loc[df["BsmtQual"].isna(), "BsmtFullBath"] = 0
   df.loc[df["BsmtQual"].isna(), "BsmtHalfBath"] = 0
-  df["BsmtQual"] = df["BsmtQual"].fillna("None")
+  df["BsmtQual"] = df["BsmtQual"].fillna("NA")
 
   # Outdoor area properties transformations
 
-  df["FireplaceQu"] = df["FireplaceQu"].fillna("None")
-  df["PoolQC"] = df["PoolQC"].fillna("None")
-  df["Fence"] = df["Fence"].fillna("None")
-  df["MiscFeature"] = df["MiscFeature"].fillna("None")
+  df["FireplaceQu"] = df["FireplaceQu"].fillna("NA")
+  df["PoolQC"] = df["PoolQC"].fillna("NA")
+  df["Fence"] = df["Fence"].fillna("NA")
+  df["MiscFeature"] = df["MiscFeature"].fillna("NA")
 
   # Kitchen properties transformations
 
   # General clean up transformations
 
   df = df.dropna()
+  df = df.drop(columns=["Id"])
 
   return df
 

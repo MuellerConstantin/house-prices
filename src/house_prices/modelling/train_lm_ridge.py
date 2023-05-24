@@ -4,25 +4,36 @@ Module for training a linear regression model with ridge regularization.
 
 import argparse
 import pandas as pd
+import numpy as np
 import joblib
 from sklearn.pipeline import Pipeline
 from sklearn.linear_model import Ridge
 from sklearn.model_selection import RandomizedSearchCV
 from sklearn.impute import SimpleImputer
-from sklearn.preprocessing import OneHotEncoder, StandardScaler
-from sklearn.compose import make_column_transformer, make_column_selector
+from sklearn.preprocessing import OneHotEncoder, StandardScaler, OrdinalEncoder
+from sklearn.compose import ColumnTransformer, TransformedTargetRegressor
+from house_prices.modelling.feature_selection import get_ordinal_feature_names, get_binary_feature_names, get_numerical_feature_names, ORDINAL_FEATURE_MAPPINGS
 
 # pylint: disable=unnecessary-lambda-assignment
 vprint = lambda *a, **k: None
 
-def build_model():
+def build_model(df: pd.DataFrame):
   """
   Builds a linear regression model with ridge regularization.
   """
 
   vprint("Building model ...")
 
-  categorical_pipeline = Pipeline([
+  ordinal_features = get_ordinal_feature_names(df)
+  binary_features = get_binary_feature_names(df)
+  numerical_features = get_numerical_feature_names(df)
+
+  ordinal_pipeline = Pipeline([
+    ("imputer", SimpleImputer(strategy="most_frequent")),
+    ("encoder", OrdinalEncoder(categories=[value for key, value in ORDINAL_FEATURE_MAPPINGS.items()], dtype=int)),
+  ])
+
+  binary_pipeline = Pipeline([
     ("imputer", SimpleImputer(strategy="most_frequent")),
     ("encoder", OneHotEncoder(handle_unknown="ignore")),
   ])
@@ -32,14 +43,17 @@ def build_model():
     ("scaler", StandardScaler()),
   ])
 
-  transformer = make_column_transformer(
-    (categorical_pipeline, make_column_selector(dtype_include="object")),
-    (numerical_pipeline, make_column_selector(dtype_include="number")),
-  )
+  transformer = ColumnTransformer([
+    ("ordinal", ordinal_pipeline, ordinal_features),
+    ("binary", binary_pipeline, binary_features),
+    ("numerical", numerical_pipeline, numerical_features),
+  ])
+
+  estimator = TransformedTargetRegressor(regressor=Ridge(), func=np.log, inverse_func=np.exp)
 
   model = Pipeline([
     ("transformer", transformer),
-    ("regressor", Ridge()),
+    ("estimator", estimator),
   ])
 
   return model
@@ -56,7 +70,7 @@ def train_model(x: pd.DataFrame,
   Trains a linear regression model with ridge regularization.
   """
 
-  model = build_model()
+  model = build_model(x)
   cv = RandomizedSearchCV(model, param_distributions, n_iter=n_iter, cv=n_folds,
                           n_jobs=n_jobs, verbose=verbose, random_state=random_state, return_train_score=True)
 
@@ -89,11 +103,11 @@ def main():
   df = pd.read_csv(args.input)
 
   hyperparameters = {
-    "regressor__alpha": [0.00025, 0.0005, 0.001, 0.0025, 0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1, 2.5, 5, 10],
+    "estimator__regressor__alpha": np.logspace(-3, 3, 50),
   }
 
   model = train_model(df.drop("SalePrice", axis=1), df["SalePrice"], hyperparameters,
-                      verbose=5 if args.verbose else 0, n_jobs=-2)
+                      verbose=5 if args.verbose else 0, n_jobs=-2, n_iter=20)
 
   vprint(f"Saving model to '{args.output}' ...")
 
