@@ -2,12 +2,14 @@ stages:
   preprocess_train:
     cmd: preprocess -v -i data/raw/train.csv -o data/processed/train.csv
     deps:
+    - src/house_prices/etl/preprocess.py
     - data/raw/train.csv
     outs:
     - data/processed/train.csv
   preprocess_test:
     cmd: preprocess -v -i data/raw/test.csv -o data/processed/test.csv
     deps:
+    - src/house_prices/etl/preprocess.py
     - data/raw/test.csv
     outs:
     - data/processed/test.csv
@@ -17,6 +19,7 @@ stages:
     - split.seed
     - split.test_size
     deps:
+    - src/house_prices/etl/split.py
     - data/processed/train.csv
     outs:
     - data/modelling/train.csv
@@ -24,12 +27,14 @@ stages:
   train_lm:
     cmd: train_lm -v -i data/modelling/train.csv -o models/lm.joblib
     deps:
+    - src/house_prices/modelling/train_lm.py
     - data/modelling/train.csv
     outs:
     - models/lm.joblib
   train_lm_ridge:
     cmd: train_lm_ridge -v -i data/modelling/train.csv -o models/lm_ridge.joblib
     deps:
+    - src/house_prices/modelling/train_lm_ridge.py
     - data/modelling/train.csv
     outs:
     - models/lm_ridge.joblib

@@ -16,6 +16,9 @@ stages:
     - path: data/raw/test.csv
       md5: dcec4b79bf9c7317bd9e17789bf888f0
       size: 451405
+    - path: src/house_prices/etl/preprocess.py
+      md5: f1eeaa0833875f564510ab6668b2f2c0
+      size: 4390
     outs:
     - path: data/processed/test.csv
       md5: 79ed1c2c423b4ee3e983c1b328e5a03d
@@ -26,6 +29,9 @@ stages:
     - path: data/raw/train.csv
       md5: 80ccab65fb115cbad143dbbd2bcd5577
       size: 460676
+    - path: src/house_prices/etl/preprocess.py
+      md5: f1eeaa0833875f564510ab6668b2f2c0
+      size: 4390
     outs:
     - path: data/processed/train.csv
       md5: 2a9fa0139a9781008a7b75c4a938e768
@@ -36,34 +42,43 @@ stages:
     - path: data/processed/train.csv
       md5: 2a9fa0139a9781008a7b75c4a938e768
       size: 511813
+    - path: src/house_prices/etl/split.py
+      md5: 8ae0bd12b4a48f94946af7820703548e
+      size: 1567
     params:
       params.yaml:
-        split.seed: 42
+        split.seed: 33
         split.test_size: 0.2
     outs:
     - path: data/modelling/train.csv
-      md5: 55f6497ed59d97fa3a699a998c298e5e
-      size: 386024
+      md5: 6ed700115290f46dc4f7bba7acf3ee82
+      size: 385876
     - path: data/modelling/validation.csv
-      md5: 32cf800001a0a4b876017692a3d0aaa4
-      size: 96960
+      md5: 74f1f38c58b69fa69297124bd2a98829
+      size: 97108
   train_lm:
     cmd: train_lm -v -i data/modelling/train.csv -o models/lm.joblib
     deps:
     - path: data/modelling/train.csv
-      md5: 55f6497ed59d97fa3a699a998c298e5e
-      size: 386024
+      md5: 6ed700115290f46dc4f7bba7acf3ee82
+      size: 385876
+    - path: src/house_prices/modelling/train_lm.py
+      md5: 4d7d3a9486e1d87bc00d42f998af0946
+      size: 2325
     outs:
     - path: models/lm.joblib
-      md5: 6afe8bcfef84b6548255612e1cb8f970
-      size: 25917
+      md5: 9de998cf346dcb0b475138e8f0d534f9
+      size: 25853
   train_lm_ridge:
     cmd: train_lm_ridge -v -i data/modelling/train.csv -o models/lm_ridge.joblib
     deps:
     - path: data/modelling/train.csv
-      md5: 55f6497ed59d97fa3a699a998c298e5e
-      size: 386024
+      md5: 6ed700115290f46dc4f7bba7acf3ee82
+      size: 385876
+    - path: src/house_prices/modelling/train_lm_ridge.py
+      md5: be79e36424fcc0b8aa7cd5c6b5b6ef9c
+      size: 3057
     outs:
     - path: models/lm_ridge.joblib
-      md5: 4bc90324a8696a391d99ab28e0de8c82
-      size: 31495
+      md5: 82137c5039a8ae598e9cf77a798ccf21
+      size: 33311

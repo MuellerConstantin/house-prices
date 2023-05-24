@@ -58,7 +58,7 @@ def train_model(x: pd.DataFrame,
 
   model = build_model()
   cv = RandomizedSearchCV(model, param_distributions, n_iter=n_iter, cv=n_folds,
-                          n_jobs=n_jobs, verbose=verbose, random_state=random_state)
+                          n_jobs=n_jobs, verbose=verbose, random_state=random_state, return_train_score=True)
 
   vprint("Training model ...")
 
@@ -93,7 +93,7 @@ def main():
   }
 
   model = train_model(df.drop("SalePrice", axis=1), df["SalePrice"], hyperparameters,
-                      verbose=5 if args.verbose else 0)
+                      verbose=5 if args.verbose else 0, n_jobs=-2)
 
   vprint(f"Saving model to '{args.output}' ...")
 
