@@ -16,11 +16,11 @@ setup(
   ],
   entry_points={
     "console_scripts": [
-      "preprocess=house_prices.etl.preprocess:main",
-      "split=house_prices.etl.split:main",
-      "train_lm=house_prices.modelling.train_lm:main",
-      "train_lm_ridge=house_prices.modelling.train_lm_ridge:main",
-      "train_random_forest=house_prices.modelling.train_random_forest:main",
+      "preprocess=house_prices.preprocess:main",
+      "split=house_prices.split:main",
+      "linear_regression=house_prices.ml.linear_regression:main",
+      "linear_ridge_regression=house_prices.ml.linear_ridge_regression:main",
+      "random_forest=house_prices.ml.random_forest:main",
     ]
   }
 )

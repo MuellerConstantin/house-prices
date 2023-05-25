@@ -1,5 +1,6 @@
 """
-Module for preparing data for modeling.
+Module for preparing data for modeling. It contains functions which are designed for the preprocessing
+of the data set of this project.
 """
 
 import pandas as pd

@@ -7,4 +7,5 @@ dvc-ssh
 numpy
 pandas
 matplotlib
+seaborn
 scikit-learn

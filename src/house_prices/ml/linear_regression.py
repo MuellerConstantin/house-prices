@@ -10,22 +10,18 @@ from sklearn.pipeline import Pipeline
 from sklearn.linear_model import LinearRegression
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import OneHotEncoder, StandardScaler, OrdinalEncoder
-from sklearn.compose import ColumnTransformer, TransformedTargetRegressor
-from house_prices.modelling.feature_selection import get_ordinal_feature_names, get_binary_feature_names, get_numerical_feature_names, ORDINAL_FEATURE_MAPPINGS
+from sklearn.compose import TransformedTargetRegressor
+from house_prices.modelling import build_model, ORDINAL_FEATURE_MAPPINGS
 
 # pylint: disable=unnecessary-lambda-assignment
 vprint = lambda *a, **k: None
 
-def build_model(df: pd.DataFrame):
+def train_model(x: pd.DataFrame, y: pd.Series):
   """
-  Builds a linear regression model.
+  Trains a linear regression model.
   """
 
   vprint("Building model ...")
-
-  ordinal_features = get_ordinal_feature_names(df)
-  binary_features = get_binary_feature_names(df)
-  numerical_features = get_numerical_feature_names(df)
 
   ordinal_pipeline = Pipeline([
     ("imputer", SimpleImputer(strategy="most_frequent")),
@@ -42,27 +38,9 @@ def build_model(df: pd.DataFrame):
     ("scaler", StandardScaler()),
   ])
 
-  transformer = ColumnTransformer([
-    ("ordinal", ordinal_pipeline, ordinal_features),
-    ("binary", binary_pipeline, binary_features),
-    ("numerical", numerical_pipeline, numerical_features),
-  ])
-
   estimator = TransformedTargetRegressor(regressor=LinearRegression(), func=np.log, inverse_func=np.exp)
 
-  model = Pipeline([
-    ("transformer", transformer),
-    ("estimator", estimator),
-  ])
-
-  return model
-
-def train_model(x: pd.DataFrame, y: pd.Series):
-  """
-  Trains a linear regression model.
-  """
-
-  model = build_model(x)
+  model = build_model(x, estimator, ordinal_pipeline, binary_pipeline, numerical_pipeline)
 
   vprint("Training model ...")
 
@@ -71,7 +49,7 @@ def train_model(x: pd.DataFrame, y: pd.Series):
   return model
 
 def main():
-  parser = argparse.ArgumentParser(prog="train_lm.py",
+  parser = argparse.ArgumentParser(prog="linear_regression.py",
                                    formatter_class=argparse.RawTextHelpFormatter,
                                    description="Trains a linear regression model.")
 

@@ -2,14 +2,14 @@ stages:
   preprocess_train:
     cmd: preprocess -v -i data/raw/train.csv -o data/processed/train.csv
     deps:
-    - src/house_prices/etl/preprocess.py
+    - src/house_prices/preprocess.py
     - data/raw/train.csv
     outs:
     - data/processed/train.csv
   preprocess_test:
     cmd: preprocess -v -i data/raw/test.csv -o data/processed/test.csv
     deps:
-    - src/house_prices/etl/preprocess.py
+    - src/house_prices/preprocess.py
     - data/raw/test.csv
     outs:
     - data/processed/test.csv
@@ -19,32 +19,32 @@ stages:
     - split.seed
     - split.test_size
     deps:
-    - src/house_prices/etl/split.py
+    - src/house_prices/split.py
     - data/processed/train.csv
     outs:
     - data/modelling/train.csv
     - data/modelling/validation.csv
-  train_lm:
-    cmd: train_lm -v -i data/modelling/train.csv -o models/lm.joblib
+  linear_regression:
+    cmd: linear_regression -v -i data/modelling/train.csv -o models/linear_regression.joblib
     deps:
-    - src/house_prices/modelling/train_lm.py
-    - src/house_prices/modelling/feature_selection.py
+    - src/house_prices/ml/linear_regression.py
+    - src/house_prices/modelling.py
     - data/modelling/train.csv
     outs:
-    - models/lm.joblib
-  train_lm_ridge:
-    cmd: train_lm_ridge -v -i data/modelling/train.csv -o models/lm_ridge.joblib
+    - models/linear_regression.joblib
+  linear_ridge_regression:
+    cmd: linear_ridge_regression -v -i data/modelling/train.csv -o models/linear_ridge_regression.joblib
     deps:
-    - src/house_prices/modelling/train_lm_ridge.py
-    - src/house_prices/modelling/feature_selection.py
+    - src/house_prices/ml/linear_ridge_regression.py
+    - src/house_prices/modelling.py
     - data/modelling/train.csv
     outs:
-    - models/lm_ridge.joblib
-  train_random_forest:
-    cmd: train_random_forest -v -i data/modelling/train.csv -o models/random_forest.joblib
+    - models/linear_ridge_regression.joblib
+  random_forest:
+    cmd: random_forest -v -i data/modelling/train.csv -o models/random_forest.joblib
     deps:
+    - src/house_prices/ml/random_forest.py
+    - src/house_prices/modelling.py
     - data/modelling/train.csv
-    - src/house_prices/modelling/feature_selection.py
-    - src/house_prices/modelling/train_random_forest.py
     outs:
     - models/random_forest.joblib

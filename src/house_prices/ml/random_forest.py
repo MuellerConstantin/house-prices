@@ -11,22 +11,24 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import RandomizedSearchCV
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import OneHotEncoder, StandardScaler, OrdinalEncoder
-from sklearn.compose import ColumnTransformer, TransformedTargetRegressor
-from house_prices.modelling.feature_selection import get_ordinal_feature_names, get_binary_feature_names, get_numerical_feature_names, ORDINAL_FEATURE_MAPPINGS
+from house_prices.modelling import build_model, ORDINAL_FEATURE_MAPPINGS
 
 # pylint: disable=unnecessary-lambda-assignment
 vprint = lambda *a, **k: None
 
-def build_model(df: pd.DataFrame):
+def train_model(x: pd.DataFrame,
+                y: pd.Series,
+                param_distributions,
+                n_iter=10,
+                n_folds=10,
+                n_jobs=None,
+                verbose=0,
+                random_state=42):
   """
-  Builds a random forest model.
+  Trains a random forest model.
   """
 
   vprint("Building model ...")
-
-  ordinal_features = get_ordinal_feature_names(df)
-  binary_features = get_binary_feature_names(df)
-  numerical_features = get_numerical_feature_names(df)
 
   ordinal_pipeline = Pipeline([
     ("imputer", SimpleImputer(strategy="most_frequent")),
@@ -43,34 +45,9 @@ def build_model(df: pd.DataFrame):
     ("scaler", StandardScaler()),
   ])
 
-  transformer = ColumnTransformer([
-    ("ordinal", ordinal_pipeline, ordinal_features),
-    ("binary", binary_pipeline, binary_features),
-    ("numerical", numerical_pipeline, numerical_features),
-  ])
+  estimator = RandomForestRegressor()
 
-  estimator = TransformedTargetRegressor(regressor=RandomForestRegressor(), func=np.log, inverse_func=np.exp)
-
-  model = Pipeline([
-    ("transformer", transformer),
-    ("estimator", estimator),
-  ])
-
-  return model
-
-def train_model(x: pd.DataFrame,
-                y: pd.Series,
-                param_distributions,
-                n_iter=10,
-                n_folds=10,
-                n_jobs=None,
-                verbose=0,
-                random_state=42):
-  """
-  Trains a random forest model.
-  """
-
-  model = build_model(x)
+  model = build_model(x, estimator, ordinal_pipeline, binary_pipeline, numerical_pipeline)
   cv = RandomizedSearchCV(model, param_distributions, n_iter=n_iter, cv=n_folds,
                           n_jobs=n_jobs, verbose=verbose, random_state=random_state, return_train_score=True)
 
@@ -81,7 +58,7 @@ def train_model(x: pd.DataFrame,
   return cv
 
 def main():
-  parser = argparse.ArgumentParser(prog="train_random_forest.py",
+  parser = argparse.ArgumentParser(prog="random_forest.py",
                                    formatter_class=argparse.RawTextHelpFormatter,
                                    description="Trains a random forest model.")
 
@@ -103,10 +80,10 @@ def main():
   df = pd.read_csv(args.input)
 
   hyperparameters = {
-    "estimator__regressor__n_estimators": np.arange(100, 1000, 100),
-    "estimator__regressor__max_depth": np.arange(10, 100, 10),
-    "estimator__regressor__max_features": [None, "sqrt", "log2"],
-    "estimator__regressor__random_state": [42],
+    "estimator__n_estimators": np.arange(100, 1000, 100),
+    "estimator__max_depth": np.arange(10, 100, 10),
+    "estimator__max_features": [None, "sqrt", "log2"],
+    "estimator__random_state": [42],
   }
 
   model = train_model(df.drop("SalePrice", axis=1), df["SalePrice"], hyperparameters,
