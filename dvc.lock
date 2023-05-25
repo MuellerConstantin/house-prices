@@ -88,3 +88,19 @@ stages:
     - path: models/lm_ridge.joblib
       md5: 2854bc864c82d38b4b87e91d91dbebb2
       size: 38399
+  train_random_forest:
+    cmd: train_random_forest -v -i data/modelling/train.csv -o models/random_forest.joblib
+    deps:
+    - path: data/modelling/train.csv
+      md5: e648688724b7d1236229794dc173f6cd
+      size: 368980
+    - path: src/house_prices/modelling/feature_selection.py
+      md5: 2c5ec7d88870743bcfb91aa93c6f7922
+      size: 1416
+    - path: src/house_prices/modelling/train_random_forest.py
+      md5: 9c0345579a71bd85dcf5b1ec90bffdb2
+      size: 3804
+    outs:
+    - path: models/random_forest.joblib
+      md5: a31dd658b6b944a7846be21e7e3a772b
+      size: 54981375
