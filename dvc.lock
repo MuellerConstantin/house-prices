@@ -111,15 +111,15 @@ stages:
       md5: e648688724b7d1236229794dc173f6cd
       size: 368980
     - path: src/house_prices/ml/random_forest.py
-      md5: bf55f233f5276c3fc4e84da5e821f498
-      size: 3138
+      md5: 45a1ed6295c06031a5ac9b6e1fd2e85c
+      size: 3160
     - path: src/house_prices/modelling.py
       md5: 349bd1480aa3a1dc063c0994dd2bb7f4
       size: 2129
     outs:
     - path: models/random_forest.joblib
-      md5: 1a8805183fa29427c4bc76627ee8a952
-      size: 46646527
+      md5: 0d57247deb776e9bdec620a4c9ac95c9
+      size: 8944783
   linear_regression:
     cmd: linear_regression -v -i data/modelling/train.csv -o models/linear_regression.joblib
     deps:

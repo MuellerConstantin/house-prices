@@ -42,7 +42,6 @@ def train_model(x: pd.DataFrame,
 
   numerical_pipeline = Pipeline([
     ("imputer", SimpleImputer(strategy="mean")),
-    ("scaler", StandardScaler()),
   ])
 
   estimator = RandomForestRegressor()
@@ -87,6 +86,7 @@ def main():
   hyperparameters = {
     "estimator__n_estimators": np.arange(100, 1000, 100),
     "estimator__max_depth": np.arange(10, 100, 10),
+    "estimator__min_samples_leaf": np.arange(1, 50, 5),
     "estimator__max_features": [None, "sqrt", "log2"],
     "estimator__random_state": [42],
   }
