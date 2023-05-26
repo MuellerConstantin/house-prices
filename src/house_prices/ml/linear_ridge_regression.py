@@ -12,7 +12,7 @@ from sklearn.model_selection import RandomizedSearchCV
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import OneHotEncoder, StandardScaler, OrdinalEncoder
 from sklearn.compose import TransformedTargetRegressor
-from house_prices.modelling import build_model, ORDINAL_FEATURE_MAPPINGS
+from house_prices.modelling import build_transformer, ORDINAL_FEATURE_MAPPINGS
 
 # pylint: disable=unnecessary-lambda-assignment
 vprint = lambda *a, **k: None
@@ -48,7 +48,12 @@ def train_model(x: pd.DataFrame,
 
   estimator = TransformedTargetRegressor(regressor=Ridge(), func=np.log, inverse_func=np.exp)
 
-  model = build_model(x, estimator, ordinal_pipeline, binary_pipeline, numerical_pipeline)
+  transformer = build_transformer(x, ordinal_pipeline, binary_pipeline, numerical_pipeline)
+  model = Pipeline([
+    ("transformer", transformer),
+    ("estimator", estimator),
+  ])
+
   cv = RandomizedSearchCV(model, param_distributions, n_iter=n_iter, cv=n_folds,
                           n_jobs=n_jobs, verbose=verbose, random_state=random_state, return_train_score=True)
 

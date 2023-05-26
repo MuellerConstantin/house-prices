@@ -4,7 +4,6 @@ Module contains utility functions for constructing a project specific machine le
 
 import pandas as pd
 from sklearn.pipeline import Pipeline
-from sklearn.base import BaseEstimator
 from sklearn.compose import ColumnTransformer
 
 ORDINAL_FEATURE_MAPPINGS = {
@@ -44,13 +43,12 @@ def get_binary_feature_names(df: pd.DataFrame) -> list:
 
   return df.select_dtypes(include="object").columns.difference(get_ordinal_feature_names(df)).tolist()
 
-def build_model(df: pd.DataFrame,
-                estimator: BaseEstimator,
-                ordinary_pipeline: Pipeline,
-                binary_pipeline: Pipeline,
-                numerical_pipeline: Pipeline):
+def build_transformer(df: pd.DataFrame,
+                      ordinary_pipeline: Pipeline,
+                      binary_pipeline: Pipeline,
+                      numerical_pipeline: Pipeline):
   """
-  Builds a machine learning pipeline.
+  Builds a transformer for the given data frame.
   """
 
   ordinal_features = get_ordinal_feature_names(df)
@@ -63,9 +61,4 @@ def build_model(df: pd.DataFrame,
     ("numerical", numerical_pipeline, numerical_features),
   ])
 
-  model = Pipeline([
-    ("transformer", transformer),
-    ("estimator", estimator),
-  ])
-
-  return model
+  return transformer
