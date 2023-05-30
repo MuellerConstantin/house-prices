@@ -30,7 +30,7 @@ def train_model(x: pd.DataFrame, y: pd.Series):
 
   binary_pipeline = Pipeline([
     ("imputer", SimpleImputer(strategy="most_frequent")),
-    ("encoder", OneHotEncoder(handle_unknown="ignore")),
+    ("encoder", OneHotEncoder(handle_unknown="ignore", drop="first")),
   ])
 
   numerical_pipeline = Pipeline([

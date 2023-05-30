@@ -11,14 +11,14 @@ ORDINAL_FEATURE_MAPPINGS = {
   "OverallCond": ["VPo", "Po", "Fa", "BAvg", "Avg", "AAvg", "Gd", "VGd", "Ex", "VEx"],
   "ExterQual": ["Po", "Fa", "TA", "Gd", "Ex"],
   "ExterCond": ["Po", "Fa", "TA", "Gd", "Ex"],
-  "BsmtQual": ["NA", "Po", "Fa", "TA", "Gd", "Ex"],
-  "BsmtCond": ["NA", "Po", "Fa", "TA", "Gd", "Ex"],
+  "BsmtQual": ["XX", "Po", "Fa", "TA", "Gd", "Ex"],
+  "BsmtCond": ["XX", "Po", "Fa", "TA", "Gd", "Ex"],
   "HeatingQC": ["Po", "Fa", "TA", "Gd", "Ex"],
   "KitchenQual": ["Po", "Fa", "TA", "Gd", "Ex"],
-  "FireplaceQu": ["NA", "Po", "Fa", "TA", "Gd", "Ex"],
-  "GarageQual": ["NA", "Po", "Fa", "TA", "Gd", "Ex"],
-  "GarageCond": ["NA", "Po", "Fa", "TA", "Gd", "Ex"],
-  "PoolQC": ["NA", "Fa", "TA", "Gd", "Ex"],
+  "FireplaceQu": ["XX", "Po", "Fa", "TA", "Gd", "Ex"],
+  "GarageQual": ["XX", "Po", "Fa", "TA", "Gd", "Ex"],
+  "GarageCond": ["XX", "Po", "Fa", "TA", "Gd", "Ex"],
+  "PoolQC": ["XX", "Fa", "TA", "Gd", "Ex"],
 }
 
 def get_numerical_feature_names(df: pd.DataFrame) -> list:
