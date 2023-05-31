@@ -40,6 +40,14 @@ stages:
     - data/modelling/train.csv
     outs:
     - models/linear_ridge_regression.joblib
+  linear_lasso_regression:
+    cmd: linear_lasso_regression -v -i data/modelling/train.csv -o models/linear_lasso_regression.joblib
+    deps:
+    - src/house_prices/ml/linear_lasso_regression.py
+    - src/house_prices/modelling.py
+    - data/modelling/train.csv
+    outs:
+    - models/linear_lasso_regression.joblib
   random_forest:
     cmd: random_forest -v -i data/modelling/train.csv -o models/random_forest.joblib
     deps:

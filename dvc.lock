@@ -111,14 +111,14 @@ stages:
       md5: 0c52495d40b0a97f936b0a7ea5ecc213
       size: 413297
     - path: src/house_prices/ml/random_forest.py
-      md5: b54cc37a2524a1c9dc8fa0df33f440be
-      size: 3140
+      md5: 2a35619e868b8506a6100b434aafcee2
+      size: 3121
     - path: src/house_prices/modelling.py
       md5: dfecd8e6ab6d7fb4396274674293df7c
       size: 2655
     outs:
     - path: models/random_forest.joblib
-      md5: 3f2a21f2fb0e28bff4e56f7655f8b8e8
+      md5: 308f5923f43feb9116670753009101de
       size: 1299631
   linear_regression:
     cmd: linear_regression -v -i data/modelling/train.csv -o models/linear_regression.joblib
@@ -127,15 +127,15 @@ stages:
       md5: 0c52495d40b0a97f936b0a7ea5ecc213
       size: 413297
     - path: src/house_prices/ml/linear_regression.py
-      md5: ea9cd032bb40977f3927115c2f90c988
-      size: 2533
+      md5: 464b663c3d1a0fee9dcb639c7c099e01
+      size: 2510
     - path: src/house_prices/modelling.py
       md5: dfecd8e6ab6d7fb4396274674293df7c
       size: 2655
     outs:
     - path: models/linear_regression.joblib
-      md5: dc53d76830795976a5d1bc1df611b3f7
-      size: 26899
+      md5: eec4115815333ed1890c3bb0ba8780c9
+      size: 26577
   linear_ridge_regression:
     cmd: linear_ridge_regression -v -i data/modelling/train.csv -o models/linear_ridge_regression.joblib
     deps:
@@ -143,12 +143,28 @@ stages:
       md5: 0c52495d40b0a97f936b0a7ea5ecc213
       size: 413297
     - path: src/house_prices/ml/linear_ridge_regression.py
-      md5: bd9e0218835213bc3a568893b9613205
-      size: 3181
+      md5: 60acd64036851cd0b0316e81a7e28be1
+      size: 3158
     - path: src/house_prices/modelling.py
       md5: dfecd8e6ab6d7fb4396274674293df7c
       size: 2655
     outs:
     - path: models/linear_ridge_regression.joblib
-      md5: 12a36212de370d84573b1e75b86177ad
-      size: 36095
+      md5: fb09850188be3322c5baa70efba651ed
+      size: 35839
+  linear_lasso_regression:
+    cmd: linear_lasso_regression -v -i data/modelling/train.csv -o models/linear_lasso_regression.joblib
+    deps:
+    - path: data/modelling/train.csv
+      md5: 0c52495d40b0a97f936b0a7ea5ecc213
+      size: 413297
+    - path: src/house_prices/ml/linear_lasso_regression.py
+      md5: a16ee0f696ee6a95fc8bcbf0187f6ac9
+      size: 3158
+    - path: src/house_prices/modelling.py
+      md5: dfecd8e6ab6d7fb4396274674293df7c
+      size: 2655
+    outs:
+    - path: models/linear_lasso_regression.joblib
+      md5: 15c3648dbc6dbae2bff00364653b0102
+      size: 35999

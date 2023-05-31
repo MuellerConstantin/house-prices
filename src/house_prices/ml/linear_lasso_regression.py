@@ -1,5 +1,5 @@
 """
-Module for training a random forest model.
+Module for training a linear regression model with lasso regularization.
 """
 
 import argparse
@@ -7,10 +7,11 @@ import pandas as pd
 import numpy as np
 import joblib
 from sklearn.pipeline import Pipeline
-from sklearn.ensemble import RandomForestRegressor
+from sklearn.linear_model import Lasso
 from sklearn.model_selection import RandomizedSearchCV
 from sklearn.impute import SimpleImputer
-from sklearn.preprocessing import OneHotEncoder, OrdinalEncoder
+from sklearn.preprocessing import OneHotEncoder, RobustScaler, OrdinalEncoder
+from sklearn.compose import TransformedTargetRegressor
 from house_prices.modelling import build_transformer, get_ordinal_feature_mappings
 
 # pylint: disable=unnecessary-lambda-assignment
@@ -25,7 +26,7 @@ def train_model(x: pd.DataFrame,
                 verbose=0,
                 random_state=42):
   """
-  Trains a random forest model.
+  Trains a linear regression model with lasso regularization.
   """
 
   vprint("Building model ...")
@@ -42,9 +43,10 @@ def train_model(x: pd.DataFrame,
 
   numerical_pipeline = Pipeline([
     ("imputer", SimpleImputer(strategy="mean")),
+    ("scaler", RobustScaler()),
   ])
 
-  estimator = RandomForestRegressor()
+  estimator = TransformedTargetRegressor(regressor=Lasso(), func=np.log, inverse_func=np.exp)
 
   transformer = build_transformer(x, ordinal_pipeline, binary_pipeline, numerical_pipeline)
   model = Pipeline([
@@ -62,9 +64,9 @@ def train_model(x: pd.DataFrame,
   return cv
 
 def main():
-  parser = argparse.ArgumentParser(prog="random_forest.py",
+  parser = argparse.ArgumentParser(prog="linear_lasso_regression.py",
                                    formatter_class=argparse.RawTextHelpFormatter,
-                                   description="Trains a random forest model.")
+                                   description="Trains a linear lasso regression model.")
 
   parser.add_argument("-v", "--verbose", action="store_true",
                       help="Print out verbose messages.")
@@ -84,15 +86,11 @@ def main():
   df = pd.read_csv(args.input)
 
   hyperparameters = {
-    "estimator__n_estimators": np.arange(100, 1000, 100),
-    "estimator__max_depth": np.arange(10, 100, 10),
-    "estimator__min_samples_leaf": np.arange(1, 50, 5),
-    "estimator__max_features": [None, "sqrt", "log2"],
-    "estimator__random_state": [42],
+    "estimator__regressor__alpha": np.logspace(-3, 3, 50),
   }
 
   model = train_model(df.drop("SalePrice", axis=1), df["SalePrice"], hyperparameters,
-                      verbose=5 if args.verbose else 0, n_jobs=-2)
+                      verbose=5 if args.verbose else 0, n_jobs=-2, n_iter=20)
 
   vprint(f"Saving model to '{args.output}' ...")
 

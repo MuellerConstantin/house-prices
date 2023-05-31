@@ -10,7 +10,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.linear_model import Ridge
 from sklearn.model_selection import RandomizedSearchCV
 from sklearn.impute import SimpleImputer
-from sklearn.preprocessing import OneHotEncoder, StandardScaler, OrdinalEncoder
+from sklearn.preprocessing import OneHotEncoder, RobustScaler, OrdinalEncoder
 from sklearn.compose import TransformedTargetRegressor
 from house_prices.modelling import build_transformer, get_ordinal_feature_mappings
 
@@ -38,12 +38,12 @@ def train_model(x: pd.DataFrame,
 
   binary_pipeline = Pipeline([
     ("imputer", SimpleImputer(strategy="most_frequent")),
-    ("encoder", OneHotEncoder(handle_unknown="ignore", categories="auto")),
+    ("encoder", OneHotEncoder(handle_unknown="ignore")),
   ])
 
   numerical_pipeline = Pipeline([
     ("imputer", SimpleImputer(strategy="mean")),
-    ("scaler", StandardScaler()),
+    ("scaler", RobustScaler()),
   ])
 
   estimator = TransformedTargetRegressor(regressor=Ridge(), func=np.log, inverse_func=np.exp)
