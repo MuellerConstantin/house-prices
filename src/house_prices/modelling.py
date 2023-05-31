@@ -6,6 +6,9 @@ import pandas as pd
 from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer
 
+EXCLUDED_FEATURES = ["Id", "GarageCars", "GrLivArea", "Utilities", "Street", "Condition2",
+                     "RoofMatl", "Heating", "PoolQC", "MiscFeature", "MoSold", "YrSold"]
+
 ORDINAL_FEATURE_MAPPINGS = {
   "OverallQual": ["VPo", "Po", "Fa", "BAvg", "Avg", "AAvg", "Gd", "VGd", "Ex", "VEx"],
   "OverallCond": ["VPo", "Po", "Fa", "BAvg", "Avg", "AAvg", "Gd", "VGd", "Ex", "VEx"],
@@ -26,7 +29,7 @@ def get_numerical_feature_names(df: pd.DataFrame) -> list:
   Returns a list of numerical features.
   """
 
-  return df.select_dtypes(include="number").columns.tolist()
+  return df.select_dtypes(include=["number"]).columns.difference(EXCLUDED_FEATURES).tolist()
 
 # pylint: disable=unused-argument
 def get_ordinal_feature_names(df: pd.DataFrame) -> list:
@@ -34,14 +37,22 @@ def get_ordinal_feature_names(df: pd.DataFrame) -> list:
   Returns a list of ordinal features.
   """
 
-  return list(ORDINAL_FEATURE_MAPPINGS.keys())
+  return [key for key in ORDINAL_FEATURE_MAPPINGS if key not in EXCLUDED_FEATURES]
+
+def get_ordinal_feature_mappings(df: pd.DataFrame) -> list:
+  """
+  Returns a list of feature mappings for selected ordinal features.
+  """
+
+  return [value for key, value in ORDINAL_FEATURE_MAPPINGS.items() if key not in EXCLUDED_FEATURES]
 
 def get_binary_feature_names(df: pd.DataFrame) -> list:
   """
   Returns a list of binary features.
   """
 
-  return df.select_dtypes(include="object").columns.difference(get_ordinal_feature_names(df)).tolist()
+  return (df.select_dtypes(include="object").columns.difference(get_ordinal_feature_names(df) + EXCLUDED_FEATURES)
+            .tolist())
 
 def build_transformer(df: pd.DataFrame,
                       ordinary_pipeline: Pipeline,

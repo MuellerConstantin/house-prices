@@ -11,7 +11,7 @@ from sklearn.linear_model import LinearRegression
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import OneHotEncoder, StandardScaler, OrdinalEncoder
 from sklearn.compose import TransformedTargetRegressor
-from house_prices.modelling import build_transformer, ORDINAL_FEATURE_MAPPINGS
+from house_prices.modelling import build_transformer, get_ordinal_feature_mappings
 
 # pylint: disable=unnecessary-lambda-assignment
 vprint = lambda *a, **k: None
@@ -25,12 +25,12 @@ def train_model(x: pd.DataFrame, y: pd.Series):
 
   ordinal_pipeline = Pipeline([
     ("imputer", SimpleImputer(strategy="most_frequent")),
-    ("encoder", OrdinalEncoder(categories=[value for key, value in ORDINAL_FEATURE_MAPPINGS.items()], dtype=int)),
+    ("encoder", OrdinalEncoder(categories=get_ordinal_feature_mappings(x), dtype=int)),
   ])
 
   binary_pipeline = Pipeline([
     ("imputer", SimpleImputer(strategy="most_frequent")),
-    ("encoder", OneHotEncoder(handle_unknown="ignore", drop="first")),
+    ("encoder", OneHotEncoder(handle_unknown="ignore", drop="first", categories="auto")),
   ])
 
   numerical_pipeline = Pipeline([
