@@ -11,7 +11,7 @@
 ## Introduction
 
 This is a data analysis project about the Ames (Iowa) housing dataset using advanced regression
-techniques. The dataset itself is obtained from [Kaggle](https://www.kaggle.com/competitions/house-prices-advanced-regression-techniques) as part of a competition.
+techniques. The dataset itself is obtained from [Kaggle](https://www.kaggle.com/competitions/house-prices-advanced-regression-techniques) as part of a competition. This project was processed as part of the "Advanced Applied Machine Learning" course at the [DHBW Karlsruhe](https://www.karlsruhe.dhbw.de/startseite.html).
 
 ## License
 
