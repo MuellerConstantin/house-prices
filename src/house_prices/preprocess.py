@@ -4,6 +4,7 @@ of the data set of this project.
 """
 
 import pandas as pd
+import numpy as np
 import argparse
 
 # pylint: disable=unnecessary-lambda-assignment
@@ -15,6 +16,28 @@ def preprocess(df: pd.DataFrame):
   """
 
   vprint("Preprocessing data ...")
+
+  # Feature engineering transformations
+
+  df["Age"] = df["YrSold"] - df["YearBuilt"]
+  df["RemodAge"] = df["YrSold"] - df["YearRemodAdd"]
+  df["TotalSF"] = df["TotalBsmtSF"] + df["GrLivArea"]
+  df["TotalBathAbvGr"] = df["FullBath"] + df["HalfBath"] * 0.5
+  df["TotalBathBsmt"] = df["BsmtFullBath"] + df["BsmtHalfBath"] * 0.5
+  df["AvgRoomSF"] = round(df["GrLivArea"] / (df["TotRmsAbvGrd"] + df["TotalBathAbvGr"]), 2)
+
+  df["OverallGrade"] = np.ceil((df["OverallQual"] + df["OverallCond"]) / 2).astype(int)
+  df["OverallGrade"] = df["OverallGrade"].replace({
+    10: "VEx",
+    9: "Ex",
+    8: "VGd",
+    7: "Gd",
+    6: "AAvg",
+    5: "Avg",
+    4: "BAvg",
+    3: "Fa",
+    2: "Po",
+    1: "VPo"})
 
   # Building properties transformations
 
@@ -107,14 +130,23 @@ def preprocess(df: pd.DataFrame):
 
   # Kitchen properties transformations
 
-  # General clean up and feature transformations
+  # Sale properties transformations
 
-  df["Age"] = df["YrSold"] - df["YearBuilt"]
-  df["RemodAge"] = df["YrSold"] - df["YearRemodAdd"]
-  df["TotalSF"] = df["TotalBsmtSF"] + df["GrLivArea"]
-  df["TotalBathAbvGr"] = df["FullBath"] + df["HalfBath"] * 0.5
-  df["TotalBathBsmt"] = df["BsmtFullBath"] + df["BsmtHalfBath"] * 0.5
-  df["AvgRoomSF"] = round(df["GrLivArea"] / (df["TotRmsAbvGrd"] + df["TotalBathAbvGr"]), 2)
+  df["MoSold"] = df["MoSold"].replace({
+    1: "Jan",
+    2: "Feb",
+    3: "Mar",
+    4: "Apr",
+    5: "May",
+    6: "Jun",
+    7: "Jul",
+    8: "Aug",
+    9: "Sep",
+    10: "Oct",
+    11: "Nov",
+    12: "Dec"})
+
+  # General clean up transformations
 
   df = df.dropna()
   df = df.drop(columns=["Id"])

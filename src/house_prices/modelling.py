@@ -6,25 +6,29 @@ import pandas as pd
 from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer
 
-EXCLUDED_FEATURES = ["Id", "GarageArea", "Utilities", "Street", "Condition2",
-                     "RoofMatl", "Heating", "PoolQC", "PoolArea" "MiscFeature",
-                     "MoSold", "YrSold", "1stFlrSF", "2ndFlrSF", "FullBath",
-                     "HalfBath", "BsmtFullBath", "BsmtHalfBath", "YearBuilt",
-                     "YearRemodAdd", "BsmtFinSF1", "BsmtFinSF2"]
+EXCLUDED_FEATURES = ["Id"]
 
 ORDINAL_FEATURE_MAPPINGS = {
   "OverallQual": ["VPo", "Po", "Fa", "BAvg", "Avg", "AAvg", "Gd", "VGd", "Ex", "VEx"],
   "OverallCond": ["VPo", "Po", "Fa", "BAvg", "Avg", "AAvg", "Gd", "VGd", "Ex", "VEx"],
+  "OverallGrade": ["VPo", "Po", "Fa", "BAvg", "Avg", "AAvg", "Gd", "VGd", "Ex", "VEx"],
   "ExterQual": ["Po", "Fa", "TA", "Gd", "Ex"],
   "ExterCond": ["Po", "Fa", "TA", "Gd", "Ex"],
   "BsmtQual": ["XX", "Po", "Fa", "TA", "Gd", "Ex"],
   "BsmtCond": ["XX", "Po", "Fa", "TA", "Gd", "Ex"],
+  "BsmtFinType1": ["XX", "Unf", "LwQ", "Rec", "BLQ", "ALQ", "GLQ"],
+  "BsmtFinType2": ["XX", "Unf", "LwQ", "Rec", "BLQ", "ALQ", "GLQ"],
+  "BsmtExposure": ["XX", "No", "Mn", "Av", "Gd"],
   "HeatingQC": ["Po", "Fa", "TA", "Gd", "Ex"],
   "KitchenQual": ["Po", "Fa", "TA", "Gd", "Ex"],
   "FireplaceQu": ["XX", "Po", "Fa", "TA", "Gd", "Ex"],
   "GarageQual": ["XX", "Po", "Fa", "TA", "Gd", "Ex"],
   "GarageCond": ["XX", "Po", "Fa", "TA", "Gd", "Ex"],
   "PoolQC": ["XX", "Fa", "TA", "Gd", "Ex"],
+  "LandSlope": ["Sev", "Mod", "Gtl"],
+  "LotShape": ["IR3", "IR2", "IR1", "Reg"],
+  "PavedDrive": ["N", "P", "Y"],
+  "Utilities": ["ELO", "NoSeWa", "NoSewr", "AllPub"],
 }
 
 def get_numerical_feature_names(df: pd.DataFrame) -> list:
