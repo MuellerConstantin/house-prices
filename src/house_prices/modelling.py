@@ -6,8 +6,11 @@ import pandas as pd
 from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer
 
-EXCLUDED_FEATURES = ["Id", "GarageCars", "GrLivArea", "Utilities", "Street", "Condition2",
-                     "RoofMatl", "Heating", "PoolQC", "MiscFeature", "MoSold", "YrSold"]
+EXCLUDED_FEATURES = ["Id", "GarageArea", "Utilities", "Street", "Condition2",
+                     "RoofMatl", "Heating", "PoolQC", "PoolArea" "MiscFeature",
+                     "MoSold", "YrSold", "1stFlrSF", "2ndFlrSF", "FullBath",
+                     "HalfBath", "BsmtFullBath", "BsmtHalfBath", "YearBuilt",
+                     "YearRemodAdd", "BsmtFinSF1", "BsmtFinSF2"]
 
 ORDINAL_FEATURE_MAPPINGS = {
   "OverallQual": ["VPo", "Po", "Fa", "BAvg", "Avg", "AAvg", "Gd", "VGd", "Ex", "VEx"],

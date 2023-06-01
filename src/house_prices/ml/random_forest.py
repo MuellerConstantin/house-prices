@@ -84,9 +84,9 @@ def main():
   df = pd.read_csv(args.input)
 
   hyperparameters = {
-    "estimator__n_estimators": np.arange(100, 1000, 100),
-    "estimator__max_depth": np.arange(10, 100, 10),
-    "estimator__min_samples_leaf": np.arange(1, 50, 5),
+    "estimator__n_estimators": np.arange(100, 2000, 100),
+    "estimator__max_depth": np.arange(10, 400, 10),
+    "estimator__min_samples_leaf": np.arange(5, 50, 5),
     "estimator__max_features": [None, "sqrt", "log2"],
     "estimator__random_state": [42],
   }

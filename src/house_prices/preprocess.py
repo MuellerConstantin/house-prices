@@ -111,9 +111,10 @@ def preprocess(df: pd.DataFrame):
 
   df["Age"] = df["YrSold"] - df["YearBuilt"]
   df["RemodAge"] = df["YrSold"] - df["YearRemodAdd"]
-  df["TotalSF"] = df["TotalBsmtSF"] + df["1stFlrSF"] + df["2ndFlrSF"] + df["BsmtFinSF1"] + df["BsmtFinSF2"]
+  df["TotalSF"] = df["TotalBsmtSF"] + df["GrLivArea"]
   df["TotalBathAbvGr"] = df["FullBath"] + df["HalfBath"] * 0.5
-  df["AvgRoomSF"] = df["GrLivArea"] / (df["TotRmsAbvGrd"] + df["TotalBathAbvGr"])
+  df["TotalBathBsmt"] = df["BsmtFullBath"] + df["BsmtHalfBath"] * 0.5
+  df["AvgRoomSF"] = round(df["GrLivArea"] / (df["TotRmsAbvGrd"] + df["TotalBathAbvGr"]), 2)
 
   df = df.dropna()
   df = df.drop(columns=["Id"])

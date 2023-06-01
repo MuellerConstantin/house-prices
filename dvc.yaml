@@ -16,7 +16,7 @@ stages:
   split:
     cmd: split -v -i data/processed/train.csv -t data/modelling/train.csv -e data/modelling/validation.csv
     params:
-    - split.seed
+    - split.random_state
     - split.test_size
     deps:
     - src/house_prices/split.py
