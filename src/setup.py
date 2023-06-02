@@ -22,6 +22,7 @@ setup(
       "linear_ridge_regression=house_prices.ml.linear_ridge_regression:main",
       "linear_lasso_regression=house_prices.ml.linear_lasso_regression:main",
       "random_forest=house_prices.ml.random_forest:main",
+      "gradient_boosting=house_prices.ml.gradient_boosting:main",
     ]
   }
 )

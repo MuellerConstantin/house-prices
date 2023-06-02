@@ -85,8 +85,8 @@ def main():
 
   hyperparameters = {
     "estimator__n_estimators": np.arange(100, 2000, 100),
-    "estimator__max_depth": np.arange(10, 400, 10),
-    "estimator__min_samples_leaf": np.arange(5, 50, 5),
+    "estimator__max_depth": np.arange(10, 500, 10),
+    "estimator__min_samples_leaf": np.arange(5, 100, 5),
     "estimator__max_features": [None, "sqrt", "log2"],
     "estimator__random_state": [42],
   }

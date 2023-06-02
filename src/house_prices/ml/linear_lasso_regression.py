@@ -86,7 +86,7 @@ def main():
   df = pd.read_csv(args.input)
 
   hyperparameters = {
-    "estimator__regressor__alpha": np.logspace(-3, 3, 50),
+    "estimator__regressor__alpha": np.logspace(-3, 3, 100),
   }
 
   model = train_model(df.drop("SalePrice", axis=1), df["SalePrice"], hyperparameters,

@@ -56,3 +56,11 @@ stages:
     - data/modelling/train.csv
     outs:
     - models/random_forest.joblib
+  gradient_boosting:
+    cmd: gradient_boosting -v -i data/modelling/train.csv -o models/gradient_boosting.joblib
+    deps:
+    - src/house_prices/ml/gradient_boosting.py
+    - src/house_prices/modelling.py
+    - data/modelling/train.csv
+    outs:
+    - models/gradient_boosting.joblib

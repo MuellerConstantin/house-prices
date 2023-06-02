@@ -1,5 +1,5 @@
 """
-Module for training a linear regression model with ridge regularization.
+Module for training a gradient boosting model.
 """
 
 import argparse
@@ -7,11 +7,10 @@ import pandas as pd
 import numpy as np
 import joblib
 from sklearn.pipeline import Pipeline
-from sklearn.linear_model import Ridge
+from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.model_selection import RandomizedSearchCV
 from sklearn.impute import SimpleImputer
-from sklearn.preprocessing import OneHotEncoder, RobustScaler, OrdinalEncoder
-from sklearn.compose import TransformedTargetRegressor
+from sklearn.preprocessing import OneHotEncoder, OrdinalEncoder
 from house_prices.modelling import build_transformer, get_ordinal_feature_mappings
 
 # pylint: disable=unnecessary-lambda-assignment
@@ -26,7 +25,7 @@ def train_model(x: pd.DataFrame,
                 verbose=0,
                 random_state=42):
   """
-  Trains a linear regression model with ridge regularization.
+  Trains a gradient boosting model.
   """
 
   vprint("Building model ...")
@@ -43,10 +42,9 @@ def train_model(x: pd.DataFrame,
 
   numerical_pipeline = Pipeline([
     ("imputer", SimpleImputer(strategy="mean")),
-    ("scaler", RobustScaler()),
   ])
 
-  estimator = TransformedTargetRegressor(regressor=Ridge(), func=np.log, inverse_func=np.exp)
+  estimator = GradientBoostingRegressor()
 
   transformer = build_transformer(x, ordinal_pipeline, binary_pipeline, numerical_pipeline)
   model = Pipeline([
@@ -64,9 +62,9 @@ def train_model(x: pd.DataFrame,
   return cv
 
 def main():
-  parser = argparse.ArgumentParser(prog="linear_ridge_regression.py",
+  parser = argparse.ArgumentParser(prog="gradient_boosting.py",
                                    formatter_class=argparse.RawTextHelpFormatter,
-                                   description="Trains a linear ridge regression model.")
+                                   description="Trains a gradient boosting model.")
 
   parser.add_argument("-v", "--verbose", action="store_true",
                       help="Print out verbose messages.")
@@ -86,11 +84,16 @@ def main():
   df = pd.read_csv(args.input)
 
   hyperparameters = {
-    "estimator__regressor__alpha": np.logspace(1, 4, 100),
+    "estimator__n_estimators": np.arange(100, 2000, 100),
+    "estimator__learning_rate": np.arange(0.01, 0.2, 0.01),
+    "estimator__max_depth": np.arange(1, 5),
+    "estimator__min_samples_leaf": np.arange(10, 50, 5),
+    "estimator__max_features": ["sqrt", "log2", None],
+    "estimator__loss": ["squared_error", "absolute_error", "huber", "quantile"],
   }
 
   model = train_model(df.drop("SalePrice", axis=1), df["SalePrice"], hyperparameters,
-                      verbose=5 if args.verbose else 0, n_jobs=-2, n_iter=20)
+                      verbose=5 if args.verbose else 0, n_jobs=-2)
 
   vprint(f"Saving model to '{args.output}' ...")
 

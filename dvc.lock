@@ -111,15 +111,15 @@ stages:
       md5: 0a1b726fbc565b2cee6fbba92258ace4
       size: 364749
     - path: src/house_prices/ml/random_forest.py
-      md5: a45bc2dda31acd0c643c071a0c032098
-      size: 3121
+      md5: 7fb6a61b45c1c2f0f5689f989ace5500
+      size: 3122
     - path: src/house_prices/modelling.py
       md5: 647ba20ecc6aee472fa0fc92fbe5c732
       size: 2945
     outs:
     - path: models/random_forest.joblib
-      md5: eaa0f88fdc14567ac397d372334974d4
-      size: 1076095
+      md5: 5c21734864d7d89f104d3ce377f26ec8
+      size: 14874687
   linear_regression:
     cmd: linear_regression -v -i data/modelling/train.csv -o models/linear_regression.joblib
     deps:
@@ -143,15 +143,15 @@ stages:
       md5: 0a1b726fbc565b2cee6fbba92258ace4
       size: 364749
     - path: src/house_prices/ml/linear_ridge_regression.py
-      md5: 60acd64036851cd0b0316e81a7e28be1
+      md5: 5ac9ae5ad9dc034bd26d2fc388ff933e
       size: 3158
     - path: src/house_prices/modelling.py
       md5: 647ba20ecc6aee472fa0fc92fbe5c732
       size: 2945
     outs:
     - path: models/linear_ridge_regression.joblib
-      md5: 11fa5acfc423ec4c2ba992b00acff334
-      size: 40111
+      md5: dfda4ec5561f901b7a3320ac60440631
+      size: 40511
   linear_lasso_regression:
     cmd: linear_lasso_regression -v -i data/modelling/train.csv -o models/linear_lasso_regression.joblib
     deps:
@@ -159,12 +159,28 @@ stages:
       md5: 0a1b726fbc565b2cee6fbba92258ace4
       size: 364749
     - path: src/house_prices/ml/linear_lasso_regression.py
-      md5: a16ee0f696ee6a95fc8bcbf0187f6ac9
-      size: 3158
+      md5: 06eee615aed8e27594e8a8db647af4a3
+      size: 3159
     - path: src/house_prices/modelling.py
       md5: 647ba20ecc6aee472fa0fc92fbe5c732
       size: 2945
     outs:
     - path: models/linear_lasso_regression.joblib
-      md5: 80ab50aec55834bbeebcb3f10c98d1d5
-      size: 40255
+      md5: 38fb669c2277475cca7e05eb3d267325
+      size: 40655
+  gradient_boosting:
+    cmd: gradient_boosting -v -i data/modelling/train.csv -o models/gradient_boosting.joblib
+    deps:
+    - path: data/modelling/train.csv
+      md5: 0a1b726fbc565b2cee6fbba92258ace4
+      size: 364749
+    - path: src/house_prices/ml/gradient_boosting.py
+      md5: 7c8281c84ef26d6874baf3b8ccd91450
+      size: 3243
+    - path: src/house_prices/modelling.py
+      md5: 647ba20ecc6aee472fa0fc92fbe5c732
+      size: 2945
+    outs:
+    - path: models/gradient_boosting.joblib
+      md5: 2bde6b86743ec389df67ecd6a17a1885
+      size: 1027807
