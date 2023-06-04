@@ -29,6 +29,8 @@ ORDINAL_FEATURE_MAPPINGS = {
   "LotShape": ["IR3", "IR2", "IR1", "Reg"],
   "PavedDrive": ["N", "P", "Y"],
   "Utilities": ["ELO", "NoSeWa", "NoSewr", "AllPub"],
+  "MoSold": ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+              "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
 }
 
 def get_numerical_feature_names(df: pd.DataFrame) -> list:
