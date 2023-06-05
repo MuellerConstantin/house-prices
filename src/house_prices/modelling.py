@@ -55,9 +55,9 @@ def get_ordinal_feature_mappings(df: pd.DataFrame) -> list:
 
   return [value for key, value in ORDINAL_FEATURE_MAPPINGS.items() if key not in EXCLUDED_FEATURES]
 
-def get_binary_feature_names(df: pd.DataFrame) -> list:
+def get_nominal_feature_names(df: pd.DataFrame) -> list:
   """
-  Returns a list of binary features.
+  Returns a list of nominal features.
   """
 
   return (df.select_dtypes(include="object").columns.difference(get_ordinal_feature_names(df) + EXCLUDED_FEATURES)
@@ -65,19 +65,19 @@ def get_binary_feature_names(df: pd.DataFrame) -> list:
 
 def build_transformer(df: pd.DataFrame,
                       ordinary_pipeline: Pipeline,
-                      binary_pipeline: Pipeline,
+                      nominal_pipeline: Pipeline,
                       numerical_pipeline: Pipeline):
   """
   Builds a transformer for the given data frame.
   """
 
   ordinal_features = get_ordinal_feature_names(df)
-  binary_features = get_binary_feature_names(df)
+  nominal_features = get_nominal_feature_names(df)
   numerical_features = get_numerical_feature_names(df)
 
   transformer = ColumnTransformer([
     ("ordinal", ordinary_pipeline, ordinal_features),
-    ("binary", binary_pipeline, binary_features),
+    ("nominal", nominal_pipeline, nominal_features),
     ("numerical", numerical_pipeline, numerical_features),
   ])
 

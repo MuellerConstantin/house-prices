@@ -28,7 +28,7 @@ def train_model(x: pd.DataFrame, y: pd.Series):
     ("encoder", OrdinalEncoder(categories=get_ordinal_feature_mappings(x), dtype=int)),
   ])
 
-  binary_pipeline = Pipeline([
+  nominal_pipeline = Pipeline([
     ("imputer", SimpleImputer(strategy="most_frequent")),
     ("encoder", OneHotEncoder(handle_unknown="ignore", drop="first")),
   ])
@@ -40,7 +40,7 @@ def train_model(x: pd.DataFrame, y: pd.Series):
 
   estimator = TransformedTargetRegressor(regressor=LinearRegression(), func=np.log, inverse_func=np.exp)
 
-  transformer = build_transformer(x, ordinal_pipeline, binary_pipeline, numerical_pipeline)
+  transformer = build_transformer(x, ordinal_pipeline, nominal_pipeline, numerical_pipeline)
   model = Pipeline([
     ("transformer", transformer),
     ("estimator", estimator),
