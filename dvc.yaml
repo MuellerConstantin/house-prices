@@ -1,11 +1,29 @@
 stages:
-  preprocess_train:
-    cmd: preprocess -v -i data/raw/train.csv -o data/processed/train.csv
+  split:
+    cmd: split -v -i data/raw/train.csv -t data/splitted/train.csv -e data/splitted/validation.csv
+    params:
+    - split.random_state
+    - split.test_size
     deps:
-    - src/house_prices/preprocess.py
+    - src/house_prices/split.py
     - data/raw/train.csv
     outs:
+    - data/splitted/train.csv
+    - data/splitted/validation.csv
+  preprocess_train:
+    cmd: preprocess -v -i data/splitted/train.csv -o data/processed/train.csv
+    deps:
+    - src/house_prices/preprocess.py
+    - data/splitted/train.csv
+    outs:
     - data/processed/train.csv
+  preprocess_validation:
+    cmd: preprocess -v -i data/splitted/validation.csv -o data/processed/validation.csv
+    deps:
+    - src/house_prices/preprocess.py
+    - data/splitted/validation.csv
+    outs:
+    - data/processed/validation.csv
   preprocess_test:
     cmd: preprocess -v -i data/raw/test.csv -o data/processed/test.csv
     deps:
@@ -13,46 +31,35 @@ stages:
     - data/raw/test.csv
     outs:
     - data/processed/test.csv
-  split:
-    cmd: split -v -i data/processed/train.csv -t data/modelling/train.csv -e data/modelling/validation.csv
-    params:
-    - split.random_state
-    - split.test_size
-    deps:
-    - src/house_prices/split.py
-    - data/processed/train.csv
-    outs:
-    - data/modelling/train.csv
-    - data/modelling/validation.csv
   linear_regression:
-    cmd: linear_regression -v -i data/modelling/train.csv -o models/linear_regression.joblib
+    cmd: linear_regression -v -i data/processed/train.csv -o models/linear_regression.joblib
     deps:
     - src/house_prices/ml/linear_regression.py
-    - src/house_prices/modelling.py
-    - data/modelling/train.csv
+    - src/house_prices/transformation.py
+    - data/processed/train.csv
     outs:
     - models/linear_regression.joblib
   linear_ridge_regression:
-    cmd: linear_ridge_regression -v -i data/modelling/train.csv -o models/linear_ridge_regression.joblib
+    cmd: linear_ridge_regression -v -i data/processed/train.csv -o models/linear_ridge_regression.joblib
     deps:
     - src/house_prices/ml/linear_ridge_regression.py
-    - src/house_prices/modelling.py
-    - data/modelling/train.csv
+    - src/house_prices/transformation.py
+    - data/processed/train.csv
     outs:
     - models/linear_ridge_regression.joblib
   random_forest:
-    cmd: random_forest -v -i data/modelling/train.csv -o models/random_forest.joblib
+    cmd: random_forest -v -i data/processed/train.csv -o models/random_forest.joblib
     deps:
     - src/house_prices/ml/random_forest.py
-    - src/house_prices/modelling.py
-    - data/modelling/train.csv
+    - src/house_prices/transformation.py
+    - data/processed/train.csv
     outs:
     - models/random_forest.joblib
   gradient_boosting:
-    cmd: gradient_boosting -v -i data/modelling/train.csv -o models/gradient_boosting.joblib
+    cmd: gradient_boosting -v -i data/processed/train.csv -o models/gradient_boosting.joblib
     deps:
     - src/house_prices/ml/gradient_boosting.py
-    - src/house_prices/modelling.py
-    - data/modelling/train.csv
+    - src/house_prices/transformation.py
+    - data/processed/train.csv
     outs:
     - models/gradient_boosting.joblib

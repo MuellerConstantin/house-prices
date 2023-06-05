@@ -17,31 +17,31 @@ stages:
       md5: dcec4b79bf9c7317bd9e17789bf888f0
       size: 451405
     - path: src/house_prices/preprocess.py
-      md5: 0c8594255fc209971e72a886df5d7c7f
-      size: 5504
+      md5: c77224bf36b4adbaa801f31773fd5981
+      size: 5410
     outs:
     - path: data/processed/test.csv
-      md5: f9cc83bb8a4e050fa9786cc4f902f44f
-      size: 532422
+      md5: 5c36b994aa83591557ac4b40a0e2f1e7
+      size: 550982
   preprocess_train:
-    cmd: preprocess -v -i data/raw/train.csv -o data/processed/train.csv
+    cmd: preprocess -v -i data/splitted/train.csv -o data/processed/train.csv
+    deps:
+    - path: data/splitted/train.csv
+      md5: 8e25551b3e6c09cfe85c8426e6c2f0d7
+      size: 319554
+    - path: src/house_prices/preprocess.py
+      md5: c77224bf36b4adbaa801f31773fd5981
+      size: 5410
+    outs:
+    - path: data/processed/train.csv
+      md5: 8f9933952d280d8758894ce97f3eae97
+      size: 374136
+  split:
+    cmd: split -v -i data/raw/train.csv -t data/splitted/train.csv -e data/splitted/validation.csv
     deps:
     - path: data/raw/train.csv
       md5: 80ccab65fb115cbad143dbbd2bcd5577
       size: 460676
-    - path: src/house_prices/preprocess.py
-      md5: 0c8594255fc209971e72a886df5d7c7f
-      size: 5504
-    outs:
-    - path: data/processed/train.csv
-      md5: daaac410c0f181860654edd34e728533
-      size: 523957
-  split:
-    cmd: split -v -i data/processed/train.csv -t data/modelling/train.csv -e data/modelling/validation.csv
-    deps:
-    - path: data/processed/train.csv
-      md5: daaac410c0f181860654edd34e728533
-      size: 523957
     - path: src/house_prices/split.py
       md5: 5817b630e41e46e450c23f2482d05b00
       size: 3908
@@ -50,12 +50,12 @@ stages:
         split.random_state: 42
         split.test_size: 0.3
     outs:
-    - path: data/modelling/train.csv
-      md5: 0ac77746af117527adc1ce25e7c5d55c
-      size: 366954
-    - path: data/modelling/validation.csv
-      md5: 6d5128ac365ba681ae86ac1487fe29c6
-      size: 157929
+    - path: data/splitted/train.csv
+      md5: 8e25551b3e6c09cfe85c8426e6c2f0d7
+      size: 319554
+    - path: data/splitted/validation.csv
+      md5: 4ab1d881dc35d57b19a1570c5a6cb23f
+      size: 137573
   train_lm:
     cmd: train_lm -v -i data/modelling/train.csv -o models/lm.joblib
     deps:
@@ -105,53 +105,53 @@ stages:
       md5: a31dd658b6b944a7846be21e7e3a772b
       size: 54981375
   random_forest:
-    cmd: random_forest -v -i data/modelling/train.csv -o models/random_forest.joblib
+    cmd: random_forest -v -i data/processed/train.csv -o models/random_forest.joblib
     deps:
-    - path: data/modelling/train.csv
-      md5: 0ac77746af117527adc1ce25e7c5d55c
-      size: 366954
+    - path: data/processed/train.csv
+      md5: 8f9933952d280d8758894ce97f3eae97
+      size: 374136
     - path: src/house_prices/ml/random_forest.py
-      md5: 51bd8e6d216b61b5f7ca57209259e96b
-      size: 3226
-    - path: src/house_prices/modelling.py
-      md5: fe761c3bf0d2e2c73d33c321f2df629a
-      size: 3149
+      md5: d3ecb4397acd244d4ebb74b7bb919542
+      size: 3231
+    - path: src/house_prices/transformation.py
+      md5: f40e4b8c4ad296863c4fe3a07717ab6c
+      size: 3111
     outs:
     - path: models/random_forest.joblib
-      md5: 88b32a9b8f8d534cdb59c2f24ebe3772
-      size: 14866127
+      md5: 13343f0a188fe3361cc24f2bfb0e1386
+      size: 15124975
   linear_regression:
-    cmd: linear_regression -v -i data/modelling/train.csv -o models/linear_regression.joblib
+    cmd: linear_regression -v -i data/processed/train.csv -o models/linear_regression.joblib
     deps:
-    - path: data/modelling/train.csv
-      md5: 0ac77746af117527adc1ce25e7c5d55c
-      size: 366954
+    - path: data/processed/train.csv
+      md5: 8f9933952d280d8758894ce97f3eae97
+      size: 374136
     - path: src/house_prices/ml/linear_regression.py
-      md5: 03d8acf14745662861b54ba28b52e8dc
-      size: 2595
-    - path: src/house_prices/modelling.py
-      md5: fe761c3bf0d2e2c73d33c321f2df629a
-      size: 3149
+      md5: 811cd6509d0d95a281482f47861f7c4a
+      size: 2600
+    - path: src/house_prices/transformation.py
+      md5: f40e4b8c4ad296863c4fe3a07717ab6c
+      size: 3111
     outs:
     - path: models/linear_regression.joblib
-      md5: f04ef62af168b00605ca4e5ff18c62af
-      size: 32281
+      md5: 4f88153baab93276a3bc13f4debbfa6a
+      size: 32361
   linear_ridge_regression:
-    cmd: linear_ridge_regression -v -i data/modelling/train.csv -o models/linear_ridge_regression.joblib
+    cmd: linear_ridge_regression -v -i data/processed/train.csv -o models/linear_ridge_regression.joblib
     deps:
-    - path: data/modelling/train.csv
-      md5: 0ac77746af117527adc1ce25e7c5d55c
-      size: 366954
+    - path: data/processed/train.csv
+      md5: 8f9933952d280d8758894ce97f3eae97
+      size: 374136
     - path: src/house_prices/ml/linear_ridge_regression.py
-      md5: 6773f36e8d40f4ee13d847685d0dc696
-      size: 3260
-    - path: src/house_prices/modelling.py
-      md5: fe761c3bf0d2e2c73d33c321f2df629a
-      size: 3149
+      md5: 6875c6574ab1c5b5dee335909af7fc7f
+      size: 3265
+    - path: src/house_prices/transformation.py
+      md5: f40e4b8c4ad296863c4fe3a07717ab6c
+      size: 3111
     outs:
     - path: models/linear_ridge_regression.joblib
-      md5: b5534b1dce489e1a2ad9b559f3153ce2
-      size: 40575
+      md5: dbf06b28f8026043ed3f6373b137ee46
+      size: 40655
   linear_lasso_regression:
     cmd: linear_lasso_regression -v -i data/modelling/train.csv -o models/linear_lasso_regression.joblib
     deps:
@@ -169,18 +169,31 @@ stages:
       md5: 38fb669c2277475cca7e05eb3d267325
       size: 40655
   gradient_boosting:
-    cmd: gradient_boosting -v -i data/modelling/train.csv -o models/gradient_boosting.joblib
+    cmd: gradient_boosting -v -i data/processed/train.csv -o models/gradient_boosting.joblib
     deps:
-    - path: data/modelling/train.csv
-      md5: 0ac77746af117527adc1ce25e7c5d55c
-      size: 366954
+    - path: data/processed/train.csv
+      md5: 8f9933952d280d8758894ce97f3eae97
+      size: 374136
     - path: src/house_prices/ml/gradient_boosting.py
-      md5: 48459914dc302fe61fc1214406c5c2a7
-      size: 3348
-    - path: src/house_prices/modelling.py
-      md5: fe761c3bf0d2e2c73d33c321f2df629a
-      size: 3149
+      md5: 45b43398f470f55174327c9602b50a99
+      size: 3354
+    - path: src/house_prices/transformation.py
+      md5: f40e4b8c4ad296863c4fe3a07717ab6c
+      size: 3111
     outs:
     - path: models/gradient_boosting.joblib
-      md5: fc0da66ec78cae02330ad6483697ec2c
-      size: 1025647
+      md5: 2c38a0f184d945a3ae4bf24b1d61d9cb
+      size: 2338687
+  preprocess_validation:
+    cmd: preprocess -v -i data/splitted/validation.csv -o data/processed/validation.csv
+    deps:
+    - path: data/splitted/validation.csv
+      md5: 4ab1d881dc35d57b19a1570c5a6cb23f
+      size: 137573
+    - path: src/house_prices/preprocess.py
+      md5: c77224bf36b4adbaa801f31773fd5981
+      size: 5410
+    outs:
+    - path: data/processed/validation.csv
+      md5: 003796abfa5dc6e807b140311fe85c40
+      size: 160847

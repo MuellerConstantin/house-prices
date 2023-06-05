@@ -11,7 +11,7 @@ from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.model_selection import RandomizedSearchCV
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import OneHotEncoder, OrdinalEncoder
-from house_prices.modelling import build_transformer, get_ordinal_feature_mappings
+from house_prices.transformation import build_transformer, get_ordinal_feature_mappings
 
 # pylint: disable=unnecessary-lambda-assignment
 vprint = lambda *a, **k: None
@@ -87,7 +87,7 @@ def main():
     "estimator__n_estimators": np.arange(100, 2000, 100),
     "estimator__learning_rate": np.arange(0.01, 0.2, 0.01),
     "estimator__max_depth": np.arange(1, 5),
-    "estimator__min_samples_leaf": np.arange(10, 50, 5),
+    "estimator__min_samples_leaf": np.arange(50, 100, 5),
     "estimator__max_features": ["sqrt", "log2", None],
     "estimator__loss": ["squared_error", "absolute_error", "huber", "quantile"],
   }

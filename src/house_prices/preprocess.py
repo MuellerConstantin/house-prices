@@ -146,11 +146,6 @@ def preprocess(df: pd.DataFrame):
     11: "Nov",
     12: "Dec"})
 
-  # General clean up transformations
-
-  df = df.dropna()
-  df = df.drop(columns=["Id"])
-
   return df
 
 def main():

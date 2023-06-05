@@ -11,7 +11,7 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import RandomizedSearchCV
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import OneHotEncoder, OrdinalEncoder
-from house_prices.modelling import build_transformer, get_ordinal_feature_mappings
+from house_prices.transformation import build_transformer, get_ordinal_feature_mappings
 
 # pylint: disable=unnecessary-lambda-assignment
 vprint = lambda *a, **k: None

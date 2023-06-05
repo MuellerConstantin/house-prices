@@ -1,5 +1,5 @@
 """
-Module contains utility functions for constructing a project specific machine learning pipeline.
+Module contains utility functions for data transformation.
 """
 
 import pandas as pd
