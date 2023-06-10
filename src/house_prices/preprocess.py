@@ -59,7 +59,8 @@ def preprocess(df: pd.DataFrame):
     180: "PUD-ALL", # PUD - MULTILEVEL - INCL SPLIT LEV/FOYER
     190: "2FAM-ALL"}) # 2 FAMILY CONVERSION - ALL STYLES AND AGES
 
-  df["MasVnrType"] = df["MasVnrType"].fillna("XX")
+  df["MasVnrType"] = df["MasVnrType"].replace("None", "No")
+  df["MasVnrType"] = df["MasVnrType"].fillna("No")
 
   df["OverallCond"] = df["OverallCond"].replace({
     10: "VEx",
@@ -91,42 +92,43 @@ def preprocess(df: pd.DataFrame):
 
   # Utility properties transformations
 
-  df["Alley"] = df["Alley"].fillna("XX")
+  df["Alley"] = df["Alley"].fillna("No")
 
   # Neighborhood properties transformations
 
   # Garage properties transformations
 
-  df.loc[df["GarageQual"].isna(), "GarageFinish"] = "XX"
-  df.loc[df["GarageQual"].isna(), "GarageType"] = "XX"
-  df.loc[df["GarageQual"].isna(), "GarageCond"] = "XX"
+  df["GarageType"] = df["GarageType"].replace("None", "No")
+  df.loc[df["GarageQual"].isna(), "GarageFinish"] = "No"
+  df.loc[df["GarageQual"].isna(), "GarageType"] = "No"
+  df.loc[df["GarageQual"].isna(), "GarageCond"] = "No"
   df.loc[df["GarageQual"].isna(), "GarageArea"] = 0
   df.loc[df["GarageQual"].isna(), "GarageCars"] = 0
   df.loc[df["GarageQual"].isna(), "GarageYrBlt"] = 0
-  df["GarageQual"] = df["GarageQual"].fillna("XX")
+  df["GarageQual"] = df["GarageQual"].fillna("No")
 
   # Supplies properties transformations
 
   # Basement properties transformations
 
-  df.loc[df["BsmtQual"].isna(), "BsmtCond"] = "XX"
-  df.loc[df["BsmtQual"].isna(), "BsmtExposure"] = "XX"
-  df.loc[df["BsmtQual"].isna(), "BsmtFinType1"] = "XX"
-  df.loc[df["BsmtQual"].isna(), "BsmtFinType2"] = "XX"
+  df.loc[df["BsmtQual"].isna(), "BsmtCond"] = "No"
+  df.loc[df["BsmtQual"].isna(), "BsmtExposure"] = "No"
+  df.loc[df["BsmtQual"].isna(), "BsmtFinType1"] = "No"
+  df.loc[df["BsmtQual"].isna(), "BsmtFinType2"] = "No"
   df.loc[df["BsmtQual"].isna(), "BsmtFinSF1"] = 0
   df.loc[df["BsmtQual"].isna(), "BsmtFinSF2"] = 0
   df.loc[df["BsmtQual"].isna(), "BsmtUnfSF"] = 0
   df.loc[df["BsmtQual"].isna(), "TotalBsmtSF"] = 0
   df.loc[df["BsmtQual"].isna(), "BsmtFullBath"] = 0
   df.loc[df["BsmtQual"].isna(), "BsmtHalfBath"] = 0
-  df["BsmtQual"] = df["BsmtQual"].fillna("XX")
+  df["BsmtQual"] = df["BsmtQual"].fillna("No")
 
   # Outdoor area properties transformations
 
-  df["FireplaceQu"] = df["FireplaceQu"].fillna("XX")
-  df["PoolQC"] = df["PoolQC"].fillna("XX")
-  df["Fence"] = df["Fence"].fillna("XX")
-  df["MiscFeature"] = df["MiscFeature"].fillna("XX")
+  df["FireplaceQu"] = df["FireplaceQu"].fillna("No")
+  df["PoolQC"] = df["PoolQC"].fillna("No")
+  df["Fence"] = df["Fence"].fillna("No")
+  df["MiscFeature"] = df["MiscFeature"].fillna("No")
 
   # Kitchen properties transformations
 
