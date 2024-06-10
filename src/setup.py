@@ -13,6 +13,9 @@ setup(
     "pandas",
     "tqdm",
     "scikit-learn",
+    "keras",
+    "tensorflow",
+    "scikeras"
   ],
   entry_points={
     "console_scripts": [
@@ -22,6 +25,7 @@ setup(
       "linear_ridge_regression=house_prices.ml.linear_ridge_regression:main",
       "random_forest=house_prices.ml.random_forest:main",
       "gradient_boosting=house_prices.ml.gradient_boosting:main",
+      "feed_forward_nn=house_prices.dl.feed_forward_nn:main",
     ]
   }
 )

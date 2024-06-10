@@ -18,7 +18,7 @@ ORDINAL_FEATURE_MAPPINGS = {
   "BsmtCond": ["No", "Po", "Fa", "TA", "Gd", "Ex"],
   "BsmtFinType1": ["No", "Unf", "LwQ", "Rec", "BLQ", "ALQ", "GLQ"],
   "BsmtFinType2": ["No", "Unf", "LwQ", "Rec", "BLQ", "ALQ", "GLQ"],
-  "BsmtExposure": ["No", "No", "Mn", "Av", "Gd"],
+  "BsmtExposure": ["No", "Mn", "Av", "Gd"],
   "HeatingQC": ["Po", "Fa", "TA", "Gd", "Ex"],
   "KitchenQual": ["Po", "Fa", "TA", "Gd", "Ex"],
   "FireplaceQu": ["No", "Po", "Fa", "TA", "Gd", "Ex"],

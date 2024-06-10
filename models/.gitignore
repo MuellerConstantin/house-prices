@@ -3,3 +3,4 @@
 /linear_ridge_regression.joblib
 /linear_lasso_regression.joblib
 /gradient_boosting.joblib
+/feed_forward_nn.joblib

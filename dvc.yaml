@@ -63,3 +63,11 @@ stages:
     - data/processed/train.csv
     outs:
     - models/gradient_boosting.joblib
+  feed_forward_nn:
+    cmd: feed_forward_nn -v -i data/processed/train.csv -o models/feed_forward_nn.joblib
+    deps:
+    - src/house_prices/dl/feed_forward_nn.py
+    - src/house_prices/transformation.py
+    - data/processed/train.csv
+    outs:
+    - models/feed_forward_nn.joblib
